@@ -1,0 +1,1 @@
+﻿Scaffold-DbContext "{dbconnstringreplace}" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Dogs

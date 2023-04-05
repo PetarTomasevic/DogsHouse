@@ -1,0 +1,52 @@
+﻿@page "/owners"
+@using DogsHouse.Dogs;
+@using Microsoft.EntityFrameworkCore;
+
+
+<AuthorizeView>
+    <Authorized>
+        <h1>Owners</h1>
+
+ @foreach(var item in owners)
+        {
+            @item.UserName
+            <br />
+            @item.UserAddress
+            <br />
+            if(item.IsOwner==true)
+            {
+                <p>osoba je vlasnik</p>
+            }
+            if (item.IsBreeder == true)
+            {
+                <p>osoba je uzgajivač</p>
+            }
+
+       }
+    </Authorized>
+    <NotAuthorized>
+        Logirajte se prvo,
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    private List<UserProfile> owners = new List<UserProfile>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        using var context = new DogsHouseContext();
+
+        if (context is not null && context.UserProfiles is not null)
+            {
+            var getOwners = await context.UserProfiles.Where(c => c.IsOwner == true).ToListAsync();
+
+            if (getOwners is not null)
+                {
+                owners = getOwners;
+                }
+            }
+       
+    }
+}
