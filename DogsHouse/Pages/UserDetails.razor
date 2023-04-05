@@ -1,0 +1,27 @@
+﻿@page "/UserInfo"
+
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+<AuthorizeView>
+    <Authorized>
+        @userName
+
+        <br />
+        @userId
+    </Authorized>
+    <NotAuthorized>
+        Logirajte se prvo,
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    public string userName;
+    public string userId;
+    protected override async Task OnInitializedAsync()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        userName = user.Identity.Name;
+        userId = user.FindFirst(c => c.Type.Contains("nameidentifier"))?.Value;
+
+    }
+}
